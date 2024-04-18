@@ -1,8 +1,8 @@
 //Group Members: Joseph Baier, Yoan Molina
-// testing testing no changes 2
+// testing testing no changes 3
 import java.util.Scanner;
 
-public class DriverClass {
+public class ProjectDriver {
     public static void main(String[] args) {
 
     }
