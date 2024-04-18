@@ -6,6 +6,7 @@ public class ProjectDriver {
     public static void main(String[] args) {
 
     }
+    
 }
 
 public class MainMenu {
@@ -13,6 +14,14 @@ public class MainMenu {
     public static void print() {
 
     }
+}
+
+private static void StudentManagement(){
+    
+}
+
+private static void CourseManagement(){
+    
 }
 
 public abstract class Student {
