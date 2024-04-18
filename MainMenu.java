@@ -1,5 +1,4 @@
 //Group Members: Joseph Baier, Yoan Molina
-// testing testing no changes 3
 import java.util.Scanner;
 
 public class ProjectDriver {
