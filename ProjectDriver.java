@@ -1,4 +1,5 @@
 //Group Members: Joseph Baier, Yoan Molina
+
 import java.util.Scanner;
 
 public class ProjectDriver {
@@ -15,6 +16,7 @@ public class MainMenu {
 }
 
 public abstract class Student {
+    
 
     abstract public void printInvoice() {
 
