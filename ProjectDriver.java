@@ -1,4 +1,4 @@
-//Group Members: Joseph Baier, Yoan Molina
+//Group Members: Joseph Baier, Yoan Molina, Trevor Chandrapaul
 
 import java.util.Scanner;
 
