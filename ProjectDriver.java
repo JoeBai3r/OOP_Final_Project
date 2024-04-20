@@ -27,9 +27,7 @@ private static void CourseManagement(){
 public abstract class Student {
     
 
-    abstract public void printInvoice() {
-
-    }
+    abstract public void printInvoice();
 
 }
 
@@ -38,15 +36,21 @@ public abstract class GraduateStudent extends Student {
 }
 
 public class UndergraduateStudent extends Student {
+    public void printInvoice(){
 
+    }
 }
 
 public class MsStudent extends GraduateStudent {
+    public void printInvoice() {
 
+    }
 }
 
 public class PhdStudent extends GraduateStudent {
+    public void printInvoice() {
 
+    }
 }
 
 
