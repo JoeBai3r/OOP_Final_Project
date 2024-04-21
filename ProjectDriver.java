@@ -1,4 +1,4 @@
-//Group Members: Joseph Baier, Yoan Molina1, Trevor Chandrapaul, David Hablich
+//Group Members: Joseph Baier, Yoan Molina1, Trevor Chandrapaul, David Hablich. bob
 
 import java.util.Scanner;
 
