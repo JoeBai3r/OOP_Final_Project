@@ -1,6 +1,10 @@
-//Group Members: Joseph Baier, Yoan Molina, Trevor Chandrapaul
+//Group Members: Joseph Baier, Yoan Molina, Trevor Chandrapaul, David Hablich
 
 import java.util.Scanner;
+
+class IdException extends Exception {
+    
+}
 
 public class ProjectDriver {
     public static void main(String[] args) {
