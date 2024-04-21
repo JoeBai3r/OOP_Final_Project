@@ -1,4 +1,4 @@
-//Group Members: Joseph Baier, Yoan Molina, Trevor Chandrapaul, David Hablich
+//Group Members: Joseph Baier, Yoan Molina1, Trevor Chandrapaul, David Hablich
 
 import java.util.Scanner;
 
@@ -10,7 +10,7 @@ public class ProjectDriver {
     public static void main(String[] args) {
 
     }
-    
+
 }
 
 public class MainMenu {
