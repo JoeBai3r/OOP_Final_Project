@@ -20,6 +20,13 @@ public class MainMenu {
     }
 }
 
+
+public class SubMenu() {
+    
+
+}
+
+
 private static void StudentManagement(){
     
 }
@@ -29,19 +36,24 @@ private static void CourseManagement(){
 }
 
 public abstract class Student {
-    
+    private String name;
+    private String id;
 
+    public Student ( String name , String id) {
+        this.name = name;
+        this.id = id;
+    }
     abstract public void printInvoice();
 
 }
 
 public abstract class GraduateStudent extends Student {
-
+        
 }
 
 public class UndergraduateStudent extends Student {
     public void printInvoice(){
-
+        
     }
 }
 
