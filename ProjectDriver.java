@@ -16,9 +16,31 @@ public class ProjectDriver {
 public class MainMenu {
 
     public static void print() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("----------------------------");
+        System.out.println("\tMenu\n");
+        System.out.println("1 : Student Management");
+        System.out.println("2 : Course Management");
+        System.out.println("3 : Exit\n");
 
+        System.out.print("\tEnter your selection: ");
+
+        int option = s.nextInt();
+
+        System.out.println("----------------\n");
+
+        switch (option) {
+            case 1:
+                StudentManagement();
+                break;
+            case 2:
+                CourseManagement();
+                break;
+            case 3:
+                return;
+        }
     }
-}
+
 
 
 private static void StudentManagement() {
