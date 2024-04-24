@@ -44,7 +44,13 @@ public class MainMenu {
 
 
 private static void StudentManagement() {
-    
+    System.out.println("Student Management Menu: ");
+    System.out.println("Choose one of: ");
+    System.out.println("A - Search add a student");
+    System.out.println("B - Delete a Student");
+    System.out.println("C - Print Fee Invoice");
+    System.out.println("D – Print List of Students");
+    System.out.println("X – Back to Main Menu");
 }
 
 private static void CourseManagement() {
@@ -54,17 +60,38 @@ private static void CourseManagement() {
     System.out.println("A - Search for a class or lab using the class/lab number");
     System.out.println("B - delete a class");
     System.out.println("C - Add a lab to a class");
-    System.out.println("C - Add a lab to a class");
     System.out.println("X - Back to main menu");
     System.out.print("Enter your selection: ");
 
+    char option = scn.next().charAt(0);
+
     switch (option) {
-        case 1:
-            System.out.println("Add a new course:");
-        case 2:
-            System.out.println("delete a course:");
+        case 'A':
+        case 'a': //SEARCH LAB OR CLASS
+            System.out.print("Enter the Class/Lab Number: ");
             break;
-        case 0:
+        case 'B':
+        case 'b': //DELETE CLASS
+            System.out.print("Enter the Class/Lab Number: ");
+            System.out.println("          deleted!");
+            //DON'T FORGET TO UPDATE lec.txt
+            break;
+        case 'C':
+        case 'c': //ADD LAB TO LECTURE 
+            System.out.println("Enter Lab or Lecture: ");
+            System.out.println("Enter the Lecture Number to a Lab to: ");
+            int cond = 1;
+            if(cond == 1){
+                System.out.println("   is valid. Enter the rest of the information: ");
+                System.out.println("Lecture added successfully ");
+                //DON'T FORGET TO UPDATE lec.txt
+            }
+            else{
+                System.out.println("No Such Lecture Exists!");
+            }
+            break;
+        case 'X':
+        case 'x':
             break;
         }
 }
