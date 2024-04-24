@@ -93,12 +93,23 @@ private static void CourseManagement() {
         case 'X':
         case 'x':
             break;
-        }
+        default:
+            System.out.println("Invalid option! Please choose one of the provided options.");
+            // Handle invalid option here, such as displaying an error message or asking the user to try again
+            break;
+    }
 }
 
 public abstract class Student {
     private String name;
     private String id;
+    private ArrayList <String> studentData;
+
+    public Student ( String name , String id, ArrayList <String> studentData) {
+        this.name = name;
+        this.id = id;
+        this.studentData = studentData;
+    }
 
     public String getName() {
         return name;
@@ -112,11 +123,13 @@ public abstract class Student {
     public void setId(String id) {
         this.id = id;
     }
-
-    public Student ( String name , String id) {
-        this.name = name;
-        this.id = id;
+    public ArrayList<String> getStudentData() {
+        return studentData;
     }
+    public void setStudentData(ArrayList<String> studentData) {
+        this.studentData = studentData;
+    }
+
     abstract public void printInvoice();
 
 }
@@ -190,5 +203,100 @@ public class MsStudent extends GraduateStudent {
 public class PhdStudent extends GraduateStudent {
     public void printInvoice() {
 
+    }
+}
+
+
+class College {
+    private ArrayList<Student> list;
+
+    public College() {
+        this.list = new ArrayList<>();
+    }
+
+    public ArrayList<Student> getList() {
+        return list;
+    }
+
+    public void addStudent(Student student) {
+        list.add(student);
+        System.out.println("Student added successfully!");
+    }
+
+    public boolean searchById(int studentId) {
+        for (Student student : list) {
+            if (student.getId().equals(studentId))
+                return true;
+        }
+        return false;
+    }
+
+    public String getName(int studentId) {
+        for (Student student : list) {
+            if (student.getId().equals(studentId))
+                return student.getName();
+        }
+        return null;
+    }
+
+    public boolean addCourse(int studentId, int crn) {
+        for (Student student : list) {
+            if (student.getId() == studentId) {
+                student.getlistOfCrns().add(crn);
+                System.out.println("Course added successfully!");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean addCourse(int studentId, int crn, int placeHolder) {
+        for (Student student : list) {
+            if (student.getName() == studentId) {
+                student.getlistOfCrns().add(crn);
+                // System.out.println("Course added successfully!");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteCourse(int studentId, int crn) {
+        for (Student student : list) {
+            if (student.getStudentId() == studentId) {
+                boolean removed = student.getlistOfCrns().remove(Integer.valueOf(crn));
+                if (removed) {
+                    System.out.println("Course deleted successfully!");
+                    return true;
+                } else {
+                    System.out.println("CRN not found in student's course list!");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Student not found!");
+        return false;
+    }
+
+    public void printSortedInvoice(int studentId) {
+        for (Student student : list) {
+            if (student.getStudentId() == studentId) {
+                ArrayList<Integer> courses = student.getlistOfCrns();
+                Collections.sort(courses);
+                student.printFeeInvoice();
+                return;
+            }
+        }
+        System.out.println("Student not found!");
+    }
+
+    public void printInvoice(int studentId) {
+        for (Student student : list) {
+            if (student.getStudentId() == studentId) {
+                student.printFeeInvoice();
+                return;
+            }
+        }
+        System.out.println("Student not found!");
     }
 }
