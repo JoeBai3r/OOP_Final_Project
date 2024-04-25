@@ -6,16 +6,12 @@ class IdException extends Exception {
     
 }
 
-public class ProjectDriver {
-    public static void main(String[] args) {
-
-    }
-    
-}
-
 public class MainMenu {
 
-    public static void print() {
+    private static College valenceCollege;
+    
+    public static String mainMenu() {
+        String selection = "0";
         Scanner s = new Scanner(System.in);
         System.out.println("----------------------------");
         System.out.println("\tMenu\n");
@@ -26,79 +22,144 @@ public class MainMenu {
         System.out.print("\tEnter your selection: ");
 
         int option = s.nextInt();
-
         System.out.println("----------------\n");
+        return selection;
+        
+    }
 
-        switch (option) {
-            case 1:
-                StudentManagement();
+    private static void StudentManagement() {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Student Management Menu: ");
+        System.out.println("Choose one of: ");
+        System.out.println("A - Add a student");
+        System.out.println("B - Search for a student by ID");
+        System.out.println("C - Delete a student");
+        System.out.println("D - Print fee invoice of student by ID");
+        System.out.println("E - Print list of students");
+        System.out.println("X - Back to main menu");
+    
+        char studentOption = scn.next().charAt(0);
+    
+        switch (studentOption) {
+            case 'A':
+            case 'a': //ADD a student
+                boolean checkId = true;
+                String studentId;
+                do {
+                    System.out.println("Enter student's ID:");
+                    studentId = scn.nextLine();
+                    checkId = false;
+                    for (Student student : valenceCollege.getList()) {
+                        if (student.getId().equals(studentId)) {
+                            System.out.println("Sorry, " + studentId + " is already assigned to another student.");
+                            checkId = true;
+                            break;
+                        }
+                    }
+                    } while (checkId);
+                    System.out.println("Student type (PhD, Ms, or Undergrad): ");
+                    String studentType = scn.nextLine();
+                    System.out.println("Enter student name:");
+                    String studentName = scn.nextLine();
+                    break;
+            case 'B':
+            case 'b': //SEARCH a student
+                System.out.println("Search a student by id");
                 break;
-            case 2:
-                CourseManagement();
+            case 'C':
+            case 'c': //DELETE student
+                System.out.print("Delete a student ");
+                System.out.println("          deleted!");
+                //DON'T FORGET TO UPDATE lec.txt
                 break;
-            case 3:
-                return;
+            case 'D':
+            case 'd': //Print fee  
+                System.out.println("Print fee invoice of student by id");
+                break;
+            case 'E':
+            case 'e': //Print list from txt file
+                System.out.println("Print list of students");
+                break;
+            case 'X': //Go back to main menu
+            case 'x':
+                break;
+            default:
+                System.out.println("Invalid option. Please try again");
+                break;
+        }
+    
+    }
+
+    private static void CourseManagement() {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Course Management Menu: ");
+        System.out.println("Choose one of: ");
+        System.out.println("A - Search for a class or lab using the class/lab number");
+        System.out.println("B - delete a class");
+        System.out.println("C - Add a lab to a class");
+        System.out.println("X - Back to main menu");
+        System.out.print("Enter your selection: ");
+    
+        char courseOption = scn.next().charAt(0);
+    
+        switch (courseOption) {
+            case 'A':
+            case 'a': //SEARCH LAB OR CLASS
+                System.out.print("Enter the Class/Lab Number: ");
+                break;
+            case 'B':
+            case 'b': //DELETE CLASS
+                System.out.print("Enter the Class/Lab Number: ");
+                System.out.println("          deleted!");
+                //DON'T FORGET TO UPDATE lec.txt
+                break;
+            case 'C':
+            case 'c': //ADD LAB TO LECTURE 
+                System.out.println("Enter Lab or Lecture: ");
+                System.out.println("Enter the Lecture Number to a Lab to: ");
+                int cond = 1;
+                if(cond == 1){
+                    System.out.println("   is valid. Enter the rest of the information: ");
+                    System.out.println("Lecture added successfully ");
+                    //DON'T FORGET TO UPDATE lec.txt
+                }
+                else{
+                    System.out.println("No Such Lecture Exists!");
+                }
+                break;
+            case 'X':
+            case 'x':
+                break;
+            default:
+                System.out.println("Invalid option. Please try again");
+                break;
         }
     }
 
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        valenceCollege = new College();
 
+        String choice = mainMenu();
+        while (choice.compareTo("0") != 0) {
 
-private static void StudentManagement() {
-    System.out.println("Student Management Menu: ");
-    System.out.println("Choose one of: ");
-    System.out.println("A - Search add a student");
-    System.out.println("B - Delete a Student");
-    System.out.println("C - Print Fee Invoice");
-    System.out.println("D – Print List of Students");
-    System.out.println("X – Back to Main Menu");
+            switch (choice) {
+                case "1":
+                    StudentManagement();
+                    break;
+                case "2":
+                    CourseManagement();
+                    break;
+                case "3":
+                    System.err.println("Goodbye!");
+                    System.exit(0);
+                    return;
+
+            }
+        }
+    }  
 }
 
-private static void CourseManagement() {
-    Scanner scn = new Scanner(System.in);
-    System.out.println("Course Management Menu: ");
-    System.out.println("Choose one of: ");
-    System.out.println("A - Search for a class or lab using the class/lab number");
-    System.out.println("B - delete a class");
-    System.out.println("C - Add a lab to a class");
-    System.out.println("X - Back to main menu");
-    System.out.print("Enter your selection: ");
-
-    char option = scn.next().charAt(0);
-
-    switch (option) {
-        case 'A':
-        case 'a': //SEARCH LAB OR CLASS
-            System.out.print("Enter the Class/Lab Number: ");
-            break;
-        case 'B':
-        case 'b': //DELETE CLASS
-            System.out.print("Enter the Class/Lab Number: ");
-            System.out.println("          deleted!");
-            //DON'T FORGET TO UPDATE lec.txt
-            break;
-        case 'C':
-        case 'c': //ADD LAB TO LECTURE 
-            System.out.println("Enter Lab or Lecture: ");
-            System.out.println("Enter the Lecture Number to a Lab to: ");
-            int cond = 1;
-            if(cond == 1){
-                System.out.println("   is valid. Enter the rest of the information: ");
-                System.out.println("Lecture added successfully ");
-                //DON'T FORGET TO UPDATE lec.txt
-            }
-            else{
-                System.out.println("No Such Lecture Exists!");
-            }
-            break;
-        case 'X':
-        case 'x':
-            break;
-        default:
-            System.out.println("Invalid option! Please choose one of the provided options.");
-            // Handle invalid option here, such as displaying an error message or asking the user to try again
-            break;
-    }
-}
 
 public abstract class Student {
     private String name;
@@ -231,18 +292,11 @@ class College {
         return false;
     }
 
-    public String getName(int studentId) {
-        for (Student student : list) {
-            if (student.getId().equals(studentId))
-                return student.getName();
-        }
-        return null;
-    }
 
     public boolean addCourse(int studentId, int crn) {
         for (Student student : list) {
-            if (student.getId() == studentId) {
-                student.getlistOfCrns().add(crn);
+            if (student.getId().equals(studentId)) {
+                student.getStudentData().add(crn);
                 System.out.println("Course added successfully!");
                 return true;
             }
@@ -252,7 +306,7 @@ class College {
 
     public boolean addCourse(int studentId, int crn, int placeHolder) {
         for (Student student : list) {
-            if (student.getName() == studentId) {
+            if (student.getName().equals(studentId)) {
                 student.getlistOfCrns().add(crn);
                 // System.out.println("Course added successfully!");
                 return true;
@@ -263,7 +317,7 @@ class College {
 
     public boolean deleteCourse(int studentId, int crn) {
         for (Student student : list) {
-            if (student.getStudentId() == studentId) {
+            if (student.getId().equals(studentId)) {
                 boolean removed = student.getlistOfCrns().remove(Integer.valueOf(crn));
                 if (removed) {
                     System.out.println("Course deleted successfully!");
