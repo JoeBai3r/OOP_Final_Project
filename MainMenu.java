@@ -196,7 +196,10 @@ public abstract class Student {
 }
 
 public abstract class GraduateStudent extends Student {
-        
+    public GraduateStudent(String name, String id, int crn) {
+        // crn is the crn that the grad student is a teaching assistant for
+        //super(name, id);
+        this.crn = crn;
 }
 
 public class UndergraduateStudent extends Student {
@@ -256,9 +259,34 @@ public class UndergraduateStudent extends Student {
 }
 
 class MsStudent extends GraduateStudent {
-    public void printInvoice() {
+    int gradCrnsTaken[];
+
+    public MsStudent(String name, String id, int[] gradCrnsTaken, int crn) {
+        // gradCoursesTaken is the array of the crns that the Ms student is taking
+        // crn is the course number that the Phd student is a teaching assistant for
+        super(name, id, crn);
+        this.gradCrnsTaken = gradCrnsTaken;
 
     }
+
+    @Override
+    public void printInvoice() {
+        System.out.print("VALENCE COLLEGE\n");
+        System.out.print("ORLANDO FL 10101\n");
+        System.out.print("---------------------\n\n");
+        System.out.print("Fee Invoice Prepared for Student: \n");
+        System.out.print(getId() + "-" + getName() + "\n\n");
+        System.out.println("1 Credit Hour = $300.00\n");
+        double preTotal = 300.00 * 6.00;
+        System.out.println("CRN\tCR_PREFIX\tCR_HOURS");
+        System.out.printf("7587\tMAT 936\t\t5\t\t$%.2f\n", 300 * 5.00);
+        System.out.printf("8997\tGOL 124\t\t1\t\t$%.2f\n\n", 300 * 1.00);
+        System.out.println("\t\t\tHealth & id fees $35.00\n");
+        System.out.println("--------------------------------------");
+        double total = preTotal + 35.00;
+        System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", total);
+    }
+
 }
 
 class PhdStudent extends GraduateStudent {
