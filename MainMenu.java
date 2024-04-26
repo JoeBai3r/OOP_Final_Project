@@ -161,7 +161,7 @@ public class MainMenu {
 }
 
 
-public abstract class Student {
+abstract class Student {
     private String name;
     private String id;
     private ArrayList <String> studentData;
@@ -198,7 +198,7 @@ public abstract class Student {
 public abstract class GraduateStudent extends Student {
     public GraduateStudent(String name, String id, int crn) {
         // crn is the crn that the grad student is a teaching assistant for
-        //super(name, id);
+        super(name, id);
         this.crn = crn;
 }
 
