@@ -85,6 +85,7 @@ public class MainMenu {
                     String studentType = scn.nextLine();
                     System.out.println("Enter student name:");
                     String studentName = scn.nextLine();
+                    //add constructor for grad student here?
                     break;
             case 'B':
             case 'b': //SEARCH a student
@@ -166,12 +167,12 @@ public class MainMenu {
 abstract class Student {
     private String name;
     private String id;
-    private ArrayList <String> studentData;
+    //private ArrayList <String> studentData;
 
-    public Student ( String name , String id, ArrayList <String> studentData) {
+    public Student ( String name , String id) {
         this.name = name;
         this.id = id;
-        this.studentData = studentData;
+        //this.studentData = studentData;
     }
 
     public String getName() {
@@ -186,18 +187,23 @@ abstract class Student {
     public void setId(String id) {
         this.id = id;
     }
-    public ArrayList<String> getStudentData() {
+
+    /*public ArrayList<String> getStudentData() {
         return studentData;
     }
+    */
+     /*
     public void setStudentData(ArrayList<String> studentData) {
         this.studentData = studentData;
     }
+    */
 
     abstract public void printInvoice();
 
 }
 
 public abstract class GraduateStudent extends Student {
+    int crn;
     public GraduateStudent(String name, String id, int crn) {
         // crn is the crn that the grad student is a teaching assistant for
         super(name, id);
