@@ -315,90 +315,107 @@ class PhdStudent extends GraduateStudent {
     }
 }
 
+class Lab {
+    private String crn;
 
-class College {
-    private ArrayList<Student> list;
+    private String classroom;
 
-    public College() {
-        this.list = new ArrayList<>();
+    public String getCrn() {
+        return crn;
+    }
+    public void setCrn(String crn) {
+
+        this.crn = crn;
     }
 
-    public ArrayList<Student> getList() {
-        return list;
+    public String getClassroom() {
+        return classroom;
     }
 
-    public void addStudent(Student student) {
-        list.add(student);
-        System.out.println("Student added successfully!");
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
     }
 
-    public boolean searchById(int studentId) {
-        for (Student student : list) {
-            if (student.getId().equals(studentId))
-                return true;
-        }
-        return false;
+    @Override
+    public String toString() {
+        return crn + "," + classroom;
     }
 
-
-    public boolean addCourse(int studentId, int crn) {
-        for (Student student : list) {
-            if (student.getId().equals(studentId)) {
-                student.getStudentData().add(crn);
-                System.out.println("Course added successfully!");
-                return true;
-            }
-        }
-        return false;
+    public Lab(String crn, String classroom) {
+        this.crn = crn;
+        this.classroom = classroom;
     }
+}
 
-    public boolean addCourse(int studentId, int crn, int placeHolder) {
-        for (Student student : list) {
-            if (student.getName().equals(studentId)) {
-                student.getlistOfCrns().add(crn);
-                // System.out.println("Course added successfully!");
-                return true;
-            }
-        }
-        return false;
+class Lecture {
+    private String crn;
+    private String prefix;
+    private String lectureName;
+    private LectureType lectureType; //Grad or UnderGrad
+    private LectureMode lectureMode; //F2F, Mixed or Online
+    private String classroom;
+    private boolean hasLabs;
+    private int creditHours;
+    ArrayList<Lab> labs;
+    // _________________
+    //Helper method-used in constructors to set up the common fields
+    private void LectureCommonInfoSetUp (String crn, String
+        prefix, String lectureName, LectureType lectureType, LectureMode
+        lectureMode) {
+        this.crn = crn;
+        this.prefix = prefix;
+        this.lectureName = lectureName;
+        this.lectureType = lectureType;
+        this.lectureMode = lectureMode;
     }
-
-    public boolean deleteCourse(int studentId, int crn) {
-        for (Student student : list) {
-            if (student.getId().equals(studentId)) {
-                boolean removed = student.getlistOfCrns().remove(Integer.valueOf(crn));
-                if (removed) {
-                    System.out.println("Course deleted successfully!");
-                    return true;
-                } else {
-                    System.out.println("CRN not found in student's course list!");
-                    return false;
-                }
-            }
-        }
-        System.out.println("Student not found!");
-        return false;
+    // Non-online with Labs
+    public Lecture( String crn,
+    String prefix,
+    String lectureName,
+    LectureType lectureType,
+    LectureMode lectureMode,
+    String classroom,
+    boolean hasLabs,
+    int creditHours,
+    ArrayList<Lab> labs ) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
+        e);
+        this.classroom = classroom;
+        this.hasLabs = hasLabs;
+        this.creditHours = creditHours;
+        this.labs = labs;
     }
-
-    public void printSortedInvoice(int studentId) {
-        for (Student student : list) {
-            if (student.getStudentId() == studentId) {
-                ArrayList<Integer> courses = student.getlistOfCrns();
-                Collections.sort(courses);
-                student.printFeeInvoice();
-                return;
-            }
-        }
-        System.out.println("Student not found!");
+    // Constructor for Non-online without Labs
+    public Lecture( String crn, String prefix, String lectureName,
+    LectureType lectureType, LectureMode lectureMode, String classroom,
+    boolean hasLabs, int creditHours) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
+        e);
+        this.classroom = classroom;
+        this.hasLabs = hasLabs;
+        this.creditHours = creditHours;
     }
-
-    public void printInvoice(int studentId) {
-        for (Student student : list) {
-            if (student.getStudentId() == studentId) {
-                student.printFeeInvoice();
-                return;
-            }
-        }
-        System.out.println("Student not found!");
+    // Constructor for Online Lectures
+    public Lecture(String crn, String prefix, String lectureName,
+    LectureType lectureType, LectureMode lectureMode, int creditHours) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
+        e);
+        this.classroom = classroom;
+        this.hasLabs = hasLabs;
+        this.creditHours = creditHours;
+    }
+    //________
+    @Override
+    public String toString() {
+        String lectureAndLabs = crn + "," + prefix + "," +
+        lectureName + "," + lectureType + ","
+        + lectureMode + "," + hasLabs + "," +
+        creditHours+"\n";
+        if ( labs != null ) {//printing corresponding labs
+        //lectureAndLabs+="\n";
+        for (Lab lab: labs)
+        lectureAndLabs+= lab +"\n";
+    }
+    return lectureAndLabs;
     }
 }
