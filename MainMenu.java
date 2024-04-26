@@ -255,14 +255,37 @@ public class UndergraduateStudent extends Student {
     }
 }
 
-public class MsStudent extends GraduateStudent {
+class MsStudent extends GraduateStudent {
     public void printInvoice() {
 
     }
 }
 
-public class PhdStudent extends GraduateStudent {
+class PhdStudent extends GraduateStudent {
+
+    private String advisor;
+    private String researchSub;
+    private int supervisedLabs[];
+
+    public PhdStudent(String name, String id, String advisor, String researchSubject, int crn) {
+        super(name, id, crn);
+        this.advisor = advisor;
+        this.researchSub = researchSubject;
+    }
+
     public void printInvoice() {
+        System.out.print("VALENCE COLLEGE\n");
+        System.out.print("ORLANDO FL 10101\n");
+        System.out.print("---------------------\n\n");
+        System.out.print("Fee Invoice Prepared for Student: \n");
+        System.out.print(getId() + "-" + getName() + "\n\n");
+        System.out.println("RESEARCH");
+        double researchFee = 700.00;
+        System.out.printf(researchSub + "\t\t\t$%.2f\n\n", researchFee);
+        System.out.println("\t\tHealth & id fees $35.00\n\n");
+        System.out.println("--------------------------------------");
+        double totalPayment = researchFee + 35.00;
+        System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
 
     }
 }
