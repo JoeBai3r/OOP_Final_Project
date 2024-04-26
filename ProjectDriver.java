@@ -169,7 +169,7 @@ abstract class Student {
         }
         this.name = name;
         this.id = id;
-        // this.studentData = studentData;
+        usedIds.add(id);
     }
 
     private boolean isValidId(String id) {
