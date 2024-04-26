@@ -6,7 +6,7 @@ class IdException extends Exception {
     
 }
 
-public static class DriverClass {
+public static class ProjectDriver {
     public static void main(String[] args) {
 
         MainMenu menu = new MainMenu();
@@ -59,7 +59,6 @@ public class MainMenu {
         System.out.println("B - Search for a student by ID");
         System.out.println("C - Delete a student");
         System.out.println("D - Print fee invoice of student by ID");
-        System.out.println("E - Print list of students");
         System.out.println("X - Back to main menu");
     
         char studentOption = scn.next().charAt(0);
@@ -99,10 +98,6 @@ public class MainMenu {
             case 'D':
             case 'd': //Print fee  
                 System.out.println("Print fee invoice of student by id");
-                break;
-            case 'E':
-            case 'e': //Print list from txt file
-                System.out.println("Print list of students");
                 break;
             case 'X': //Go back to main menu
             case 'x':
