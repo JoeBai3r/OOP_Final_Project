@@ -6,12 +6,21 @@ class IdException extends Exception {
     
 }
 
-public class MainMenu {
+public static class DriverClass {
+    public static void main(String[] args) {
 
-    private static College valenceCollege;
+        MainMenu menu = new MainMenu();
+
+        while (true) {
+            menu.mainMenu();
+        }
+    }  
+
+}
+
+public class MainMenu {
     
-    public static String mainMenu() {
-        String selection = "0";
+    public void mainMenu() {
         Scanner s = new Scanner(System.in);
         System.out.println("----------------------------");
         System.out.println("\tMenu\n");
@@ -23,7 +32,22 @@ public class MainMenu {
 
         int option = s.nextInt();
         System.out.println("----------------\n");
-        return selection;
+        while (true) {
+
+            switch (option) {
+                case 1:
+                    StudentManagement();
+                    break;
+                case 2:
+                    CourseManagement();
+                    break;
+                case 0:
+                    System.err.println("Goodbye!");
+                    System.exit(0);
+
+            }
+        }
+
         
     }
 
@@ -136,28 +160,6 @@ public class MainMenu {
         }
     }
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        valenceCollege = new College();
-
-        String choice = mainMenu();
-        while (choice.compareTo("0") != 0) {
-
-            switch (choice) {
-                case "1":
-                    StudentManagement();
-                    break;
-                case "2":
-                    CourseManagement();
-                    break;
-                case "3":
-                    System.err.println("Goodbye!");
-                    System.exit(0);
-                    return;
-
-            }
-        }
-    }  
 }
 
 
