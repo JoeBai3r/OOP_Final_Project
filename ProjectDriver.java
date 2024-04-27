@@ -8,7 +8,7 @@ class IdException extends Exception {
     }
 }
 
-public static class ProjectDriver {
+public class ProjectDriver {
     public static void main(String[] args) {
 
         MainMenu menu = new MainMenu();
@@ -20,7 +20,7 @@ public static class ProjectDriver {
 
 }
 
-public class MainMenu {
+class MainMenu {
 
     public void mainMenu() {
         Scanner s = new Scanner(System.in);
@@ -49,7 +49,6 @@ public class MainMenu {
 
             }
         }
-
     }
 
     private static void StudentManagement() {
@@ -155,7 +154,6 @@ public class MainMenu {
                 break;
         }
     }
-
 }
 
 abstract class Student {
@@ -165,7 +163,7 @@ abstract class Student {
 
     public Student(String name, String id) throws IdException {
         if(!isValidId(id)){
-            throw new IdException(("Invalid id format or ID already exists\nTry again later!"))
+            throw new IdException(("Invalid id format or ID already exists\nTry again later!"));
         }
         this.name = name;
         this.id = id;
@@ -215,33 +213,33 @@ abstract class Student {
 
 }
 
-public abstract class GraduateStudent extends Student {
-    int crn;
+abstract class GraduateStudent extends Student {
+    private int crn;
 
-    public GraduateStudent(String name, String id, int crn) {
+    public GraduateStudent(String name, String id, int crn) throws IdException {
         // crn is the crn that the grad student is a teaching assistant for
         super(name, id);
         this.crn = crn;
     }
+}
 
-    public class UndergraduateStudent extends Student {
-        private int undergradCrnsTaken[];
-        private double gpa;
-        private boolean resident;
+class UndergraduateStudent extends Student {
+    private int undergradCrnsTaken[];
+    private double gpa;
+    private boolean resident;
 
-        public double creditHourPrice;
+    public double creditHourPrice;
 
-        public double calculateCreditCost(double creditHourPrice, boolean resident) {
-
-            if (resident) {
-                creditHourPrice = 120.25;
-            } else {
-                creditHourPrice = 120.25 * 2;
-            }
-            return creditHourPrice;
+    public double calculateCreditCost(double creditHourPrice, boolean resident) {
+        if (resident) {
+            creditHourPrice = 120.25;
+        } else {
+            creditHourPrice = 120.25 * 2;
         }
+        return creditHourPrice;
+    }
 
-        public UndergraduateStudent(String name, String id, int[] undergradCrnsTaken, double gpa, boolean resident) {
+        public UndergraduateStudent(String name, String id, int[] undergradCrnsTaken, double gpa, boolean resident) throws IdException {
             super(name, id);
             this.undergradCrnsTaken = undergradCrnsTaken;
             this.gpa = gpa;
@@ -283,7 +281,7 @@ public abstract class GraduateStudent extends Student {
     class MsStudent extends GraduateStudent {
         int gradCrnsTaken[];
 
-        public MsStudent(String name, String id, int[] gradCrnsTaken, int crn) {
+        public MsStudent(String name, String id, int[] gradCrnsTaken, int crn) throws IdException {
             // gradCoursesTaken is the array of the crns that the Ms student is taking
             // crn is the course number that the Phd student is a teaching assistant for
             super(name, id, crn);
@@ -311,141 +309,122 @@ public abstract class GraduateStudent extends Student {
 
     }
 
-    class PhdStudent extends GraduateStudent {
+class PhdStudent extends GraduateStudent {
 
-        private String advisor;
-        private String researchSub;
-        private int supervisedLabs[];
+    private String advisor;
+    private String researchSub;
+    private int supervisedLabs[];
 
-        public PhdStudent(String name, String id, String advisor, String researchSubject, int crn) {
-            super(name, id, crn);
-            this.advisor = advisor;
-            this.researchSub = researchSubject;
-        }
+    public PhdStudent(String name, String id, String advisor, String researchSubject, int crn) throws IdException {
+        super(name, id, crn);
+        this.advisor = advisor;
+        this.researchSub = researchSubject;
+    }
 
         public void printInvoice() {
-            System.out.print("VALENCE COLLEGE\n");
-            System.out.print("ORLANDO FL 10101\n");
-            System.out.print("---------------------\n\n");
-            System.out.print("Fee Invoice Prepared for Student: \n");
-            System.out.print(getId() + "-" + getName() + "\n\n");
-            System.out.println("RESEARCH");
-            double researchFee = 700.00;
-            System.out.printf(researchSub + "\t\t\t$%.2f\n\n", researchFee);
-            System.out.println("\t\tHealth & id fees $35.00\n\n");
-            System.out.println("--------------------------------------");
-            double totalPayment = researchFee + 35.00;
-            System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
+        System.out.print("VALENCE COLLEGE\n");
+        System.out.print("ORLANDO FL 10101\n");
+        System.out.print("---------------------\n\n");
+        System.out.print("Fee Invoice Prepared for Student: \n");
+        System.out.print(getId() + "-" + getName() + "\n\n");
+        System.out.println("RESEARCH");
+        double researchFee = 700.00;
+        System.out.printf(researchSub + "\t\t\t$%.2f\n\n", researchFee);
+        System.out.println("\t\tHealth & id fees $35.00\n\n");
+        System.out.println("--------------------------------------");
+        double totalPayment = researchFee + 35.00;
+        System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
 
-        }
+    }
+}
+
+class Lab {
+    private String crn;
+
+    private String classroom;
+
+    public String getCrn() {
+        return crn;
     }
 
-    class Lab {
-        private String crn;
-
-        private String classroom;
-
-        public String getCrn() {
-            return crn;
-        }
-
-        public void setCrn(String crn) {
-
-            this.crn = crn;
-        }
-
-        public String getClassroom() {
-            return classroom;
-        }
-
-        public void setClassroom(String classroom) {
-            this.classroom = classroom;
-        }
-
-        @Override
-        public String toString() {
-            return crn + "," + classroom;
-        }
-
-        public Lab(String crn, String classroom) {
-            this.crn = crn;
-            this.classroom = classroom;
-        }
+    public void setCrn(String crn) {
+        this.crn = crn;
     }
 
-    class Lecture {
-        private String crn;
-        private String prefix;
-        private String lectureName;
-        private LectureType lectureType; // Grad or UnderGrad
-        private LectureMode lectureMode; // F2F, Mixed or Online
-        private String classroom;
-        private boolean hasLabs;
-        private int creditHours;
-        ArrayList<Lab> labs;
+    public String getClassroom() {
+        return classroom;
+    }
 
-        // _________________
-        // Helper method-used in constructors to set up the common fields
-        private void LectureCommonInfoSetUp(String crn, String prefix, String lectureName, LectureType lectureType,
-                LectureMode lectureMode) {
-            this.crn = crn;
-            this.prefix = prefix;
-            this.lectureName = lectureName;
-            this.lectureType = lectureType;
-            this.lectureMode = lectureMode;
-        }
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
 
-        // Non-online with Labs
-    public Lecture( String crn,
-    String prefix,
-    String lectureName,
-    LectureType lectureType,
-    LectureMode lectureMode,
-    String classroom,
-    boolean hasLabs,
-    int creditHours,
-    ArrayList<Lab> labs ) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+    @Override
+    public String toString() {
+        return crn + "," + classroom;
+    }
+
+    public Lab(String crn, String classroom) {
+        this.crn = crn;
+        this.classroom = classroom;
+    }
+}
+
+class Lecture {
+    private String crn;
+    private String prefix;
+    private String lectureName;
+    private LectureType lectureType; // Grad or UnderGrad
+    private LectureMode lectureMode; // F2F, Mixed or Online
+    private String classroom;
+    private boolean hasLabs;
+    private int creditHours;
+    ArrayList<Lab> labs;
+
+    // _________________
+    // Helper method-used in constructors to set up the common fields
+    private void LectureCommonInfoSetUp(String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode) {
+        this.crn = crn;
+        this.prefix = prefix;
+        this.lectureName = lectureName;
+        this.lectureType = lectureType;
+        this.lectureMode = lectureMode;
+    }
+
+    // Non-online with Labs
+    public Lecture( String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode, String classroom, boolean hasLabs, int creditHours, ArrayList<Lab> labs ) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
         this.labs = labs;
     }
 
-        // Constructor for Non-online without Labs
-    public Lecture( String crn, String prefix, String lectureName,
-    LectureType lectureType, LectureMode lectureMode, String classroom,
-    boolean hasLabs, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+    // Constructor for Non-online without Labs
+    public Lecture( String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode, String classroom, boolean hasLabs, int creditHours) {
+    LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
     }
 
-        // Constructor for Online Lectures
-    public Lecture(String crn, String prefix, String lectureName,
-    LectureType lectureType, LectureMode lectureMode, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+    // Constructor for Online Lectures
+    public Lecture(String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode, int creditHours) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
     }
 
-        // ________
-        @Override
-        public String toString() {
-            String lectureAndLabs = crn + "," + prefix + "," +
-                    lectureName + "," + lectureType + ","
-                    + lectureMode + "," + hasLabs + "," +
-                    creditHours + "\n";
-            if (labs != null) {// printing corresponding labs
-                // lectureAndLabs+="\n";
-                for (Lab lab : labs)
-                    lectureAndLabs += lab + "\n";
-            }
-            return lectureAndLabs;
+    // ________
+    @Override
+    public String toString() {
+        String lectureAndLabs = crn + "," + prefix + "," + lectureName + "," + lectureType + "," + lectureMode + "," + hasLabs + "," + creditHours + "\n";
+        if (labs != null) {// printing corresponding labs
+            // lectureAndLabs+="\n";
+            for (Lab lab : labs)
+                lectureAndLabs += lab + "\n";
         }
+        return lectureAndLabs;
+    }
 }
