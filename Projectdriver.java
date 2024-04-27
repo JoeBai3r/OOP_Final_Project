@@ -4,16 +4,16 @@ import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class ProjectDriver {
+public class Projectdriver {
 
 
     public static void main(String[] args)  {
 
         MainMenu menu = new MainMenu();
-
         while (true) {
             menu.mainMenu();
         }
+
     }
 
 }
@@ -36,7 +36,7 @@ class College {
     public College() {
         //the instance of college leads to the text file being read
         try {
-            Scanner Scanner = new Scanner(new File("lec.txt")) ;
+            Scanner scanner = new Scanner(new File("lec.txt")) ;
             String line = "";
             String[] lectureItems;
             Lecture lecture = null;
@@ -44,10 +44,10 @@ class College {
             boolean skipLine = false;
             boolean oneMorePass = false;
 
-            while (Scanner.hasNextLine() || oneMorePass ) {
+            while (scanner.hasNextLine() || oneMorePass ) {
 
                 if (skipLine == false) {
-                    line = Scanner.nextLine();
+                    line = scanner.nextLine();
                 }
                 
                 oneMorePass = false;
@@ -80,11 +80,11 @@ class College {
                         if (hasLabs) {//Lecture has a lab
                             skipLine = true;
                             String[] labItems;
-                            while (Scanner.hasNextLine()) {
-                                line = Scanner.nextLine();
+                            while (scanner.hasNextLine()) {
+                                line = scanner.nextLine();
                                 if (line.length() > 15) {//True if this is not a lab!
                                                              
-                                    if ( Scanner.hasNextLine() == false ) {//reading the last line if any...
+                                    if ( scanner.hasNextLine() == false ) {//reading the last line if any...
                                         oneMorePass = true;
                                     }
 
@@ -135,36 +135,42 @@ class MainMenu {
             System.out.println("1 : Student Management");
             System.out.println("2 : Course Management");
             System.out.println("3 : Exit\n");
-
             System.out.print("\tEnter your selection: ");
-            int option = s.nextInt();
-            System.out.println("----------------\n");
+            try{
+                int option = s.nextInt();
+                System.out.println("----------------\n");
 
-            //boolean keeps track to make sure submenu keeps running and is only changed if x is selected
-            boolean bool = true;
+                //boolean keeps track to make sure submenu keeps running and is only changed if x is selected
+                boolean bool = true;
 
-            switch (option) {
-                case 1:
-                    while(bool) {
-                        bool = StudentManagement(bool);
-                    }
-                    break;
-                case 2:
-                    while(bool) {
-                        bool = CourseManagement(bool);
-                    }
-                    break;
-                case 0:
-                    System.err.println("Goodbye!");
-                    System.exit(0);
-                    break;
-
-            }
-
+                switch (option) {
+                    case 1:
+                        while(bool) {
+                            bool = StudentManagement(bool);
+                        }
+                        break;
+                    case 2:
+                        while(bool) {
+                            bool = CourseManagement(bool);
+                        }
+                        break;
+                    case 3:
+                        System.err.println("Goodbye!");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Please try again");
+                        break;
+                }
+            } 
+            catch(Exception e) {
+                System.out.println("Wrong input, please try again\n");
+                s.nextLine();
+            }         
         }
-
     }
 
+    
     private boolean StudentManagement(boolean bool) {
         Scanner scn = new Scanner(System.in);
         System.out.println("Student Management Menu: ");
@@ -187,12 +193,9 @@ class MainMenu {
                 String studentId;
                 String studentType;
                 String studentName;
-
                 System.out.print("Enter student's ID:");
                 studentId = scn.nextLine();
-
                 checkId = false;
-                
                 for (Student student : valenceCollege.getStudentList()) {
                     if (student.getId().equals(studentId)) {
                         System.out.println("Sorry, " + studentId + " is already assigned to another student.");
@@ -200,7 +203,7 @@ class MainMenu {
                         break;
                     }
                 }
-
+            
                 //take in students name
                 System.out.println("Enter student's Name:");
                 studentName = scn.nextLine();
@@ -368,6 +371,7 @@ class MainMenu {
 
     }
 
+
     private boolean CourseManagement(boolean bool) {
         Scanner scn = new Scanner(System.in);
         System.out.println("Course Management Menu: ");
@@ -467,8 +471,8 @@ class MainMenu {
                                 String lectureCrn;
                                 String prefix;
                                 String lectureName;
-                                LectureType Type;
-                                LectureMode lectureMode;
+                                LectureType Type = null; //may crash code
+                                LectureMode lectureMode = null; //may crash code
                                 boolean hasLabs;
                                 String Classroom;
                                 int creditHours;
@@ -534,9 +538,7 @@ class MainMenu {
 }
 
 class IdException extends Exception {
-    public IdException(String message) {
-        super(message);
-    }
+    
 }
 
 
@@ -547,13 +549,13 @@ abstract class Student {
 
     private static ArrayList<String> usedIds = new ArrayList<>();
 
-    public Student(String name, String id){ /*throws IdException {
-        if(!isValidId(id)){
+    public Student(String name, String id) {
+        /*if(!isValidId(id)){
             throw new IdException(("Invalid id format or ID already exists\nTry again later!"));
         }*/
         this.name = name;
         this.id = id;
-        usedIds.add(id);
+        //usedIds.add(id);
     }
 
     private boolean isValidId(String id) {
