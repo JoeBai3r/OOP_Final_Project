@@ -194,110 +194,119 @@ class MainMenu {
                 String studentType;
                 String studentName;
                 System.out.print("Enter student's ID:");
-                studentId = scn.nextLine();
-                checkId = false;
-                for (Student student : valenceCollege.getStudentList()) {
-                    if (student.getId().equals(studentId)) {
-                        System.out.println("Sorry, " + studentId + " is already assigned to another student.");
-                        checkId = true;
-                        break;
+                try {
+                    studentId = scn.nextLine();
+                    if(!studentId.matches("[a-z]{2}\\d{4}")) {
+                        throw new IdException(("Invalid id format or ID already exists\nTry again later!"));
                     }
-                }
-            
-                //take in students name
-                System.out.println("Enter student's Name:");
-                studentName = scn.nextLine();
+                    //checkId = false;
+                    for (Student student : valenceCollege.getStudentList()) {
+                        if (student.getId().equals(studentId)) {
+                            throw new IdException("Invalid id format or Id already exists\nTry again later!");
+                            //System.out.println("Sorry, " + studentId + " is already assigned to another student.");
+                            //checkId = true;
+                            //break;
+                        }
+                    }
                 
-                System.out.println("Student type (PhD, Ms, or Undergrad): ");
-                studentType = scn.nextLine();
-                //case if the student entered is an undergraduate
-
-                if (studentType.equals("Undergrad")) {
-                    //create a new student to add to the student array;
-                    boolean resident;
-                    System.out.println("Is student from in state? (true/false):");
-                    //state status is either true or false
-                    resident = scn.nextBoolean();
-
-                    double gpa;
-                    System.out.println("Student gpa:");
-                    gpa = scn.nextDouble();
+                    //take in students name
+                    System.out.println("Enter student's Name:");
+                    studentName = scn.nextLine();
                     
+                    System.out.println("Student type (PhD, Ms, or Undergrad): ");
+                    studentType = scn.nextLine();
+                    //case if the student entered is an undergraduate
 
-                    int courseNumber;
-                    System.out.println("how many courses is this student taking?:");
-                    courseNumber = scn.nextInt();
+                    if (studentType.equals("Undergrad")) {
+                        //create a new student to add to the student array;
+                        boolean resident;
+                        System.out.println("Is student from in state? (true/false):");
+                        //state status is either true or false
+                        resident = scn.nextBoolean();
+
+                        double gpa;
+                        System.out.println("Student gpa:");
+                        gpa = scn.nextDouble();
+                        
+
+                        int courseNumber;
+                        System.out.println("how many courses is this student taking?:");
+                        courseNumber = scn.nextInt();
 
 
-                    ArrayList<Integer> crnArray = new ArrayList<Integer>();
-                    for (int i=0; i<courseNumber; i++) {
-                        int courseId;
-                        System.out.println("Enter a course Id:");
-                        courseId = scn.nextInt();
-                        crnArray.add(courseId);
+                        ArrayList<Integer> crnArray = new ArrayList<Integer>();
+                        for (int i=0; i<courseNumber; i++) {
+                            int courseId;
+                            System.out.println("Enter a course Id:");
+                            courseId = scn.nextInt();
+                            crnArray.add(courseId);
+
+                        }
+
+                        Student newStudent = new UndergraduateStudent(studentName, studentId, crnArray, resident, gpa );
+                        valenceCollege.getStudentList().add(newStudent);
+
+                    } 
+                    //case if student is phd
+                    else if(studentType.equals("Phd")) {
+
+                        //add advisor to phd student
+                        String advisor;
+                        System.out.println("Advisor Name:");
+                        advisor = scn.nextLine();
+
+                        //add research subject to phd student
+                        String subject;
+                        System.out.println("Research Subject:");
+                        subject = scn.nextLine();
+
+                        //take in the number of labs this phd student is teaching
+                        int labCount;
+                        System.out.println("how many labs is this student teaching?:");
+                        labCount = scn.nextInt();
+
+                        //loop for each lab teaching and add to lab array for phd student
+                        ArrayList<Integer> labArray = new ArrayList<Integer>();
+                        for (int i = 0; i < labCount; i++) {
+                            int labId;
+                            System.out.println("Enter a lab Id:");
+                            labId = scn.nextInt();
+                            labArray.add(labId);
+
+                        }
+                        Student newStudent = new PhdStudent(studentName, studentId, advisor, subject, labArray);
+                        //add new student to student array
+                        valenceCollege.getStudentList().add(newStudent);
+
+                    } 
+                    //final case if student is a graduate student
+                    else if (studentType.equals("Ms")) {
+                        int courseNumber;
+                        System.out.println("how many courses is this student taking?:");
+                        courseNumber = scn.nextInt();
+
+                        ArrayList<Integer> crnArray = new ArrayList<Integer>();
+                        for (int i=0; i<courseNumber; i++) {
+                            int crn;
+                            System.out.println("Enter a crn number:");
+                            crn = scn.nextInt();
+                            crnArray.add(crn);
+                        }
+
+                        Student newStudent = new MsStudent(studentName, studentId, crnArray);
+                        valenceCollege.getStudentList().add(newStudent);
 
                     }
 
-                    Student newStudent = new UndergraduateStudent(studentName, studentId, crnArray, resident, gpa );
-                    valenceCollege.getStudentList().add(newStudent);
-
+                    System.out.println("[ " + studentName +" ] added!");
+                    System.out.println();
+                    break;
                 } 
-                //case if student is phd
-                else if(studentType.equals("Phd")) {
-
-                    //add advisor to phd student
-                    String advisor;
-                    System.out.println("Advisor Name:");
-                    advisor = scn.nextLine();
-
-                    //add research subject to phd student
-                    String subject;
-                    System.out.println("Research Subject:");
-                    subject = scn.nextLine();
-
-                    //take in the number of labs this phd student is teaching
-                    int labCount;
-                    System.out.println("how many labs is this student teaching?:");
-                    labCount = scn.nextInt();
-
-                    //loop for each lab teaching and add to lab array for phd student
-                    ArrayList<Integer> labArray = new ArrayList<Integer>();
-                    for (int i = 0; i < labCount; i++) {
-                        int labId;
-                        System.out.println("Enter a lab Id:");
-                        labId = scn.nextInt();
-                        labArray.add(labId);
-
-                    }
-                    Student newStudent = new PhdStudent(studentName, studentId, advisor, subject, labArray);
-                    //add new student to student array
-                    valenceCollege.getStudentList().add(newStudent);
-
-                } 
-                //final case if student is a graduate student
-                else if (studentType.equals("Ms")) {
-                    int courseNumber;
-                    System.out.println("how many courses is this student taking?:");
-                    courseNumber = scn.nextInt();
-
-                    ArrayList<Integer> crnArray = new ArrayList<Integer>();
-                    for (int i=0; i<courseNumber; i++) {
-                        int crn;
-                        System.out.println("Enter a crn number:");
-                        crn = scn.nextInt();
-                        crnArray.add(crn);
-                    }
-
-                    Student newStudent = new MsStudent(studentName, studentId, crnArray);
-                    valenceCollege.getStudentList().add(newStudent);
-
+                catch(IdException ide) {
+                    System.out.println(ide.getMessage());
                 }
-
-                System.out.println("[ " + studentName +" ] added!");
-                System.out.println();
-
-
-                break;
+                
+            
             case 'B':
             case 'b': // DELETE a student
                       
@@ -538,7 +547,9 @@ class MainMenu {
 }
 
 class IdException extends Exception {
-    
+    public IdException(String message) {
+        super(message);
+    }
 }
 
 
@@ -549,16 +560,13 @@ abstract class Student {
 
     private static ArrayList<String> usedIds = new ArrayList<>();
 
-    public Student(String name, String id) {
-        /*if(!isValidId(id)){
-            throw new IdException(("Invalid id format or ID already exists\nTry again later!"));
-        }*/
+    public Student(String name, String id){ // } throws IdException {
         this.name = name;
         this.id = id;
         //usedIds.add(id);
     }
 
-    private boolean isValidId(String id) {
+    /*public boolean isValidId(String id) { 
         //checks format
         if (!id.matches("[A-Z]{2}\\d{4}")) { //need to verify this works
             return false;
@@ -568,7 +576,7 @@ abstract class Student {
             return false;
         }
         return true;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -604,7 +612,6 @@ abstract class Student {
 abstract class GraduateStudent extends Student {
 
     public GraduateStudent(String name, String id) {
-
         super(name, id);
     
     }
