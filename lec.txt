@@ -24,4 +24,4 @@
 98000,CMA-008
 94442,RMA-013
 56510,RMA-028
-69970,GOL1091, Introduction to AI, Graduate, Online,1
+69970,GOL1091,Introduction to AI,Graduate,Online,1
