@@ -162,12 +162,11 @@ public class MainMenu {
 abstract class Student {
     private String name;
     private String id;
-    //private ArrayList <String> studentData;
+
 
     public Student ( String name , String id) {
         this.name = name;
         this.id = id;
-        //this.studentData = studentData;
     }
 
     public String getName() {
@@ -182,16 +181,6 @@ abstract class Student {
     public void setId(String id) {
         this.id = id;
     }
-
-    /*public ArrayList<String> getStudentData() {
-        return studentData;
-    }
-    */
-     /*
-    public void setStudentData(ArrayList<String> studentData) {
-        this.studentData = studentData;
-    }
-    */
 
     abstract public void printInvoice();
 
@@ -365,10 +354,8 @@ class Lecture {
     ArrayList<Lab> labs;
     // _________________
     //Helper method-used in constructors to set up the common fields
-    private void LectureCommonInfoSetUp (String crn, String
-        prefix, String lectureName, LectureType lectureType, LectureMode
-        lectureMode) {
-        this.crn = crn;
+    private void LectureCommonInfoSetUp (String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode) {
+         this.crn = crn;
         this.prefix = prefix;
         this.lectureName = lectureName;
         this.lectureType = lectureType;
@@ -384,19 +371,15 @@ class Lecture {
     boolean hasLabs,
     int creditHours,
     ArrayList<Lab> labs ) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
         this.labs = labs;
     }
     // Constructor for Non-online without Labs
-    public Lecture( String crn, String prefix, String lectureName,
-    LectureType lectureType, LectureMode lectureMode, String classroom,
-    boolean hasLabs, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+    public Lecture( String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode, String classroom, boolean hasLabs, int creditHours) {
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
@@ -404,8 +387,7 @@ class Lecture {
     // Constructor for Online Lectures
     public Lecture(String crn, String prefix, String lectureName,
     LectureType lectureType, LectureMode lectureMode, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMod
-        e);
+        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
@@ -413,10 +395,7 @@ class Lecture {
     //________
     @Override
     public String toString() {
-        String lectureAndLabs = crn + "," + prefix + "," +
-        lectureName + "," + lectureType + ","
-        + lectureMode + "," + hasLabs + "," +
-        creditHours+"\n";
+        String lectureAndLabs = crn + "," + prefix + "," + lectureName + "," + lectureType + "," + lectureMode + "," + hasLabs + "," + creditHours+"\n";
         if ( labs != null ) {//printing corresponding labs
         //lectureAndLabs+="\n";
         for (Lab lab: labs)
