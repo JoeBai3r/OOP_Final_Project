@@ -129,7 +129,7 @@ class College {
         }
     }// end of main
 
-    public ArrayList<Student> getStudentList() {
+    public static ArrayList<Student> getStudentList() {
         return StudentArray;
     }
 
@@ -182,7 +182,7 @@ class MainMenu {
                         break;
                 }
             } catch (Exception e) {
-                System.out.println("Wrong input, please try again\n");
+                // System.out.println("Wrong input, please try again\n");
                 s.nextLine();
             }
         }
@@ -645,11 +645,12 @@ abstract class GraduateStudent extends Student {
 }
 
 class UndergraduateStudent extends Student {
-    private ArrayList crnArray;
+    private ArrayList<Integer> crnArray;
     private double gpa;
     private boolean resident;
 
     public double creditHourPrice;
+    private String crn2;
 
     public double calculateCreditCost(double creditHourPrice, boolean resident) {
 
@@ -679,16 +680,19 @@ class UndergraduateStudent extends Student {
         double creditCost = calculateCreditCost(creditHourPrice, resident);
         System.out.printf("1 Credit Hour = $%.2f\n\n", creditCost);
         System.out.print("CRN\tCR_PREFIX\tCR_HOURS\n");
-        // for(Integer i: crnArray){
-
-        // }
-
-        System.out.printf("4587\tMAT 236\t\t4\t" + "$%.2f\n", creditCost * 4.00);
-        System.out.printf("2599\tCOP 260\t\t3\t$%.2f\n\n", creditCost * 3.00);
+        double totalHrs = 0;
+        for (Integer c : crnArray)
+            crn2 = Integer.toString(c);
+        for (Lecture l : College.getLectureList()) {
+            if (crn2.equals(l.getCrn())) {
+                totalHrs += (l.getCreditHours() * creditCost);
+                System.out.printf(l.getCrn() + "\t" + l.getPrefix() + "\t\t" + l.getCreditHours() + "\t" + "%.2f\n",
+                        (double) (l.getCreditHours() * creditCost));
+            }
+        }
         System.out.println("\t\tHealth & id fees $35.00\n");
         System.out.println("--------------------------------------");
-        double preTotal = (((calculateCreditCost(creditHourPrice, resident) * 4.00))
-                + (calculateCreditCost(creditHourPrice, resident) * 3.00) + 35.00);
+        double preTotal = totalHrs + 35.00;
         System.out.printf("\t\t\t\t$%.2f\n", preTotal);
         if (gpa >= 3.5 && preTotal > 500.00) {
             double discount = preTotal * 0.25;
@@ -706,6 +710,7 @@ class UndergraduateStudent extends Student {
 class MsStudent extends GraduateStudent {
     // crn array is an array of the courses that the ms student is taking
     private ArrayList<Integer> crnArray;
+    private String crn2;
 
     public MsStudent(String name, String id, ArrayList<Integer> crnArray) {
 
@@ -722,13 +727,20 @@ class MsStudent extends GraduateStudent {
         System.out.print("Fee Invoice Prepared for Student: \n");
         System.out.print(getId() + "-" + getName() + "\n\n");
         System.out.println("1 Credit Hour = $300.00\n");
-        double preTotal = 300.00 * 6.00;
         System.out.println("CRN\tCR_PREFIX\tCR_HOURS");
-        System.out.printf("7587\tMAT 936\t\t5\t\t$%.2f\n", 300 * 5.00);
-        System.out.printf("8997\tGOL 124\t\t1\t\t$%.2f\n\n", 300 * 1.00);
-        System.out.println("\t\t\tHealth & id fees $35.00\n");
+        double totalHrs = 0;
+        for (Integer c : crnArray)
+            crn2 = Integer.toString(c);
+        for (Lecture l : College.getLectureList()) {
+            if (crn2.equals(l.getCrn())) {
+                totalHrs += l.getCreditHours();
+                System.out.printf(l.getCrn() + "\t" + l.getPrefix() + "\t\t" + l.getCreditHours() + "\t" + "%.2f\n\n",
+                        (double) (l.getCreditHours() * 300));
+            }
+        }
+        System.out.println("\t\tHealth & id fees $35.00\n\n");
         System.out.println("--------------------------------------");
-        double total = preTotal + 35.00;
+        double total = (totalHrs * 300) + 35.00;
         System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", total);
     }
 
@@ -756,12 +768,30 @@ class PhdStudent extends GraduateStudent {
         System.out.print("Fee Invoice Prepared for Student: \n");
         System.out.print(getId() + "-" + getName() + "\n\n");
         System.out.println("RESEARCH");
+        int labs = 0;
+        for (Integer i : supervisedLabs) {
+            labs++;
+        }
         double researchFee = 700.00;
-        System.out.printf(researchSub + "\t\t\t$%.2f\n\n", researchFee);
-        System.out.println("\t\tHealth & id fees $35.00\n\n");
-        System.out.println("--------------------------------------");
-        double totalPayment = researchFee + 35.00;
-        System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
+        if (labs >= 3) {
+            System.out.printf(researchSub + "\t\t\t$%.2f\n\n", -researchFee);
+            System.out.println("\t\tHealth & id fees $35.00\n\n");
+            System.out.println("--------------------------------------");
+            double totalPayment = 35.00;
+            System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
+        } else if (labs == 2) {
+            System.out.printf(researchSub + "\t\t\t$%.2f\n\n", (researchFee * 0.5));
+            System.out.println("\t\tHealth & id fees $35.00\n\n");
+            System.out.println("--------------------------------------");
+            double totalPayment = (researchFee * 0.5) + 35.00;
+            System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
+        } else {
+            System.out.printf(researchSub + "\t\t\t$%.2f\n\n", researchFee);
+            System.out.println("\t\tHealth & id fees $35.00\n\n");
+            System.out.println("--------------------------------------");
+            double totalPayment = researchFee + 35.00;
+            System.out.printf("\t\tTotal Payments\t$%.2f\n\n\n", totalPayment);
+        }
 
     }
 }
