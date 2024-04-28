@@ -3,11 +3,27 @@
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class Projectdriver {
+    public static void createFile(ArrayList<Lecture> list, String fileName) {
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(new File(fileName));
+            for (Lecture lecture : list) {
+                pw.println(lecture.printToText());
+                for (Lab lab : lecture.labs) {
+                    pw.println(lab.toString());
+                }
+            }
+        } catch (Exception e) {
 
+        } finally {
+            pw.close();
+        }
+    }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         MainMenu menu = new MainMenu();
         while (true) {
@@ -26,17 +42,17 @@ enum LectureMode {
     F2F, MIXED, ONLINE;
 }
 
-//college class keeps track of all student arrays
+// college class keeps track of all student arrays
 class College {
 
     private static ArrayList<Student> StudentArray = new ArrayList<Student>();
-    //array list of lectures holds all lectures in from lec.txt
+    // array list of lectures holds all lectures in from lec.txt
     private static ArrayList<Lecture> ListOfLectures = new ArrayList<Lecture>();
 
     public College() {
-        //the instance of college leads to the text file being read
+        // the instance of college leads to the text file being read
         try {
-            Scanner scanner = new Scanner(new File("lec.txt")) ;
+            Scanner scanner = new Scanner(new File("lec.txt"));
             String line = "";
             String[] lectureItems;
             Lecture lecture = null;
@@ -44,7 +60,7 @@ class College {
             boolean skipLine = false;
             boolean oneMorePass = false;
 
-            while (scanner.hasNextLine() || oneMorePass ) {
+            while (scanner.hasNextLine() || oneMorePass) {
 
                 if (skipLine == false) {
                     line = scanner.nextLine();
@@ -54,11 +70,11 @@ class College {
 
                 lectureItems = line.split(",");
 
-                if (lectureItems.length > 2) { //means it must be lecture
+                if (lectureItems.length > 2) { // means it must be lecture
 
                     LectureType type;
                     LectureMode mode;
-                    //new lab array for the specific lab list being made;
+                    // new lab array for the specific lab list being made;
                     ArrayList<Lab> labList = new ArrayList<>();
 
                     type = LectureType.GRAD;
@@ -67,7 +83,8 @@ class College {
 
                     if (lectureItems[4].compareToIgnoreCase("ONLINE") == 0) {
                         skipLine = false;
-                        lecture = new Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type, LectureMode.ONLINE, Integer.parseInt(lectureItems[5]));
+                        lecture = new Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type,
+                                LectureMode.ONLINE, Integer.parseInt(lectureItems[5]));
                     } else {
                         mode = LectureMode.F2F;
                         if (lectureItems[4].compareToIgnoreCase("F2F") != 0)
@@ -77,14 +94,14 @@ class College {
                         if (lectureItems[6].compareToIgnoreCase("yes") != 0)
                             hasLabs = false;
 
-                        if (hasLabs) {//Lecture has a lab
+                        if (hasLabs) {// Lecture has a lab
                             skipLine = true;
                             String[] labItems;
                             while (scanner.hasNextLine()) {
                                 line = scanner.nextLine();
-                                if (line.length() > 15) {//True if this is not a lab!
+                                if (line.length() > 15) {// True if this is not a lab!
 
-                                    if ( scanner.hasNextLine() == false ) {//reading the last line if any...
+                                    if (scanner.hasNextLine() == false) {// reading the last line if any...
                                         oneMorePass = true;
                                     }
 
@@ -94,28 +111,29 @@ class College {
                                 Lab lab = new Lab(labItems[0], labItems[1]);
                                 labList.add(lab);
 
-                            }//end of while
-                            lecture = new Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type, mode, lectureItems[5], hasLabs, Integer.parseInt(lectureItems[7]), labList);
-                        } else {//Lecture doesn't have a lab
+                            } // end of while
+                            lecture = new Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type, mode,
+                                    lectureItems[5], hasLabs, Integer.parseInt(lectureItems[7]), labList);
+                        } else {// Lecture doesn't have a lab
                             skipLine = false;
-                            lecture = new
-                                    Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type, mode, lectureItems[5], hasLabs, Integer.parseInt(lectureItems[7]));
+                            lecture = new Lecture(lectureItems[0], lectureItems[1], lectureItems[2], type, mode,
+                                    lectureItems[5], hasLabs, Integer.parseInt(lectureItems[7]));
                         }
                     }
                 }
                 ListOfLectures.add(lecture);
-            }//end of while
+            } // end of while
 
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + e.getMessage());
         }
-    }//end of main
+    }// end of main
 
     public ArrayList<Student> getStudentList() {
         return StudentArray;
     }
 
-    public ArrayList<Lecture> getLectureList() {
+    public static ArrayList<Lecture> getLectureList() {
         return ListOfLectures;
     }
 
@@ -131,26 +149,27 @@ class MainMenu {
         while (true) {
 
             System.out.println("----------------------------");
-            System.out.println("\tMenu\n");
+            System.out.println("Main Menu\n");
             System.out.println("1 : Student Management");
             System.out.println("2 : Course Management");
             System.out.println("3 : Exit\n");
             System.out.print("\tEnter your selection: ");
-            try{
+            try {
                 int option = s.nextInt();
                 System.out.println("----------------\n");
 
-                //boolean keeps track to make sure submenu keeps running and is only changed if x is selected
+                // boolean keeps track to make sure submenu keeps running and is only changed if
+                // x is selected
                 boolean bool = true;
 
                 switch (option) {
                     case 1:
-                        while(bool) {
+                        while (bool) {
                             bool = StudentManagement(bool);
                         }
                         break;
                     case 2:
-                        while(bool) {
+                        while (bool) {
                             bool = CourseManagement(bool);
                         }
                         break;
@@ -162,14 +181,12 @@ class MainMenu {
                         System.out.println("Please try again");
                         break;
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Wrong input, please try again\n");
                 s.nextLine();
             }
         }
     }
-
 
     private boolean StudentManagement(boolean bool) {
         Scanner scn = new Scanner(System.in);
@@ -188,62 +205,61 @@ class MainMenu {
             case 'A':
             case 'a': // ADD a student
 
-                //initalize check id variable
+                // initalize check id variable
                 boolean checkId;
                 String studentId;
                 String studentType;
                 String studentName;
                 while (true) {
-    try {
-        System.out.println("Enter student's ID:");
-        studentId = scn.nextLine();
-        if (studentId.matches("[a-z]{2}\\d{4}")) {
-            break;
-        } else {
-            throw new IdException("Invalid id format or ID already exists\nTry again later!");
-        }
-    } catch (IdException e) {
-        System.out.println(e.getMessage());
-    }
-}
-
-                /* for (Student student : valenceCollege.getStudentList()) {
-                    if (student.getId().equals(studentId)) {
-                        System.out.println("Sorry, " + studentId + " is already assigned to another student.");
-                        checkId = true;
-                        break;
+                    try {
+                        System.out.println("Enter student's ID:");
+                        studentId = scn.nextLine();
+                        if (studentId.matches("[a-z]{2}\\d{4}")) {
+                            break;
+                        } else {
+                            throw new IdException("Invalid id format or ID already exists\nTry again later!");
+                        }
+                    } catch (IdException e) {
+                        System.out.println(e.getMessage());
                     }
                 }
-                */
 
+                /*
+                 * for (Student student : valenceCollege.getStudentList()) {
+                 * if (student.getId().equals(studentId)) {
+                 * System.out.println("Sorry, " + studentId +
+                 * " is already assigned to another student.");
+                 * checkId = true;
+                 * break;
+                 * }
+                 * }
+                 */
 
-                //take in students name
+                // take in students name
                 System.out.println("Enter student's Name:");
                 studentName = scn.nextLine();
 
                 System.out.println("Student type (PhD, Ms, or Undergrad): ");
                 studentType = scn.nextLine();
-                //case if the student entered is an undergraduate
+                // case if the student entered is an undergraduate
 
                 if (studentType.equals("Undergrad")) {
-                    //create a new student to add to the student array;
+                    // create a new student to add to the student array;
                     boolean resident;
                     System.out.println("Is student from in state? (true/false):");
-                    //state status is either true or false
+                    // state status is either true or false
                     resident = scn.nextBoolean();
 
                     double gpa;
                     System.out.println("Student gpa:");
                     gpa = scn.nextDouble();
 
-
                     int courseNumber;
                     System.out.println("how many courses is this student taking?:");
                     courseNumber = scn.nextInt();
 
-
                     ArrayList<Integer> crnArray = new ArrayList<Integer>();
-                    for (int i=0; i<courseNumber; i++) {
+                    for (int i = 0; i < courseNumber; i++) {
                         int courseId;
                         System.out.println("Enter a course Id:");
                         courseId = scn.nextInt();
@@ -251,29 +267,29 @@ class MainMenu {
 
                     }
 
-                    Student newStudent = new UndergraduateStudent(studentName, studentId, crnArray, resident, gpa );
+                    Student newStudent = new UndergraduateStudent(studentName, studentId, crnArray, resident, gpa);
                     valenceCollege.getStudentList().add(newStudent);
 
                 }
-                //case if student is phd
-                else if(studentType.equals("Phd")) {
+                // case if student is phd
+                else if (studentType.equals("PhD")) {
 
-                    //add advisor to phd student
+                    // add advisor to phd student
                     String advisor;
                     System.out.println("Advisor Name:");
                     advisor = scn.nextLine();
 
-                    //add research subject to phd student
+                    // add research subject to phd student
                     String subject;
                     System.out.println("Research Subject:");
                     subject = scn.nextLine();
 
-                    //take in the number of labs this phd student is teaching
+                    // take in the number of labs this phd student is teaching
                     int labCount;
                     System.out.println("how many labs is this student teaching?:");
                     labCount = scn.nextInt();
 
-                    //loop for each lab teaching and add to lab array for phd student
+                    // loop for each lab teaching and add to lab array for phd student
                     ArrayList<Integer> labArray = new ArrayList<Integer>();
                     for (int i = 0; i < labCount; i++) {
                         int labId;
@@ -283,18 +299,18 @@ class MainMenu {
 
                     }
                     Student newStudent = new PhdStudent(studentName, studentId, advisor, subject, labArray);
-                    //add new student to student array
+                    // add new student to student array
                     valenceCollege.getStudentList().add(newStudent);
 
                 }
-                //final case if student is a graduate student
-                else if (studentType.equals("Ms")) {
+                // final case if student is a graduate student
+                else if (studentType.equals("MS")) {
                     int courseNumber;
                     System.out.println("how many courses is this student taking?:");
                     courseNumber = scn.nextInt();
 
                     ArrayList<Integer> crnArray = new ArrayList<Integer>();
-                    for (int i=0; i<courseNumber; i++) {
+                    for (int i = 0; i < courseNumber; i++) {
                         int crn;
                         System.out.println("Enter a crn number:");
                         crn = scn.nextInt();
@@ -306,9 +322,8 @@ class MainMenu {
 
                 }
 
-                System.out.println("[ " + studentName +" ] added!");
+                System.out.println("[ " + studentName + " ] added!");
                 System.out.println();
-
 
                 break;
             case 'B':
@@ -318,7 +333,7 @@ class MainMenu {
                 System.out.println("Enter student id: ");
                 deleteId = scn.nextLine();
 
-                for (int i=0; i<valenceCollege.getStudentList().size(); i++) {
+                for (int i = 0; i < valenceCollege.getStudentList().size(); i++) {
                     if (valenceCollege.getStudentList().get(i).getId().equals(deleteId)) {
                         valenceCollege.getStudentList().remove(i);
                     }
@@ -326,12 +341,12 @@ class MainMenu {
 
                 break;
             case 'C':
-            case 'c': //print fee invoice
+            case 'c': // print fee invoice
                 String printId;
                 System.out.println("Enter student id: ");
                 printId = scn.nextLine();
 
-                for (int i=0; i<valenceCollege.getStudentList().size(); i++) {
+                for (int i = 0; i < valenceCollege.getStudentList().size(); i++) {
                     if (valenceCollege.getStudentList().get(i).getId().equals(printId)) {
                         valenceCollege.getStudentList().get(i).printInvoice();
                     }
@@ -341,30 +356,30 @@ class MainMenu {
             case 'd': // Print list of students
                 System.out.println();
 
-                //print out all phd students
+                // print out all phd students
                 System.out.println("PhD Students");
                 System.out.println("------------");
                 for (Student student : valenceCollege.getStudentList()) {
-                    if (student instanceof PhdStudent){
+                    if (student instanceof PhdStudent) {
                         System.out.println("\t- " + student.getName());
                     }
                 }
                 System.out.println();
-                //print out all ms students
+                // print out all ms students
                 System.out.println("MS Students");
                 System.out.println("------------");
                 for (Student student : valenceCollege.getStudentList()) {
-                    if (student instanceof MsStudent){
+                    if (student instanceof MsStudent) {
                         System.out.println("\t- " + student.getName());
                     }
                 }
 
                 System.out.println();
-                //printf out all undergraduate students
+                // printf out all undergraduate students
                 System.out.println("Undergraduate Students");
                 System.out.println("------------");
                 for (Student student : valenceCollege.getStudentList()) {
-                    if (student instanceof UndergraduateStudent){
+                    if (student instanceof UndergraduateStudent) {
                         System.out.println("\t- " + student.getName());
                     }
                 }
@@ -383,7 +398,6 @@ class MainMenu {
         return bool;
 
     }
-
 
     private boolean CourseManagement(boolean bool) {
         Scanner scn = new Scanner(System.in);
@@ -409,45 +423,50 @@ class MainMenu {
                 for (Lecture l : valenceCollege.getLectureList()) {
                     if (l.getCrn().equals(crn)) {
                         System.out.println("[ " + l + " ]\n");
+
                     } else if (l.labs != null) {
                         for (Lab a : l.labs) {
                             if (a.getCrn().equals(crn)) {
-                                System.out.println("[ " + a + " ]\n");
+                                System.out.println("Lab for[ " + l.toString() + " ]");
+                                System.out.println("Lab Rooom " + a.getClassroom() + "\n");
                             }
                         }
+                    } else {
+                        System.out.println("[ ]\n");
+                        break;
                     }
-
-
                 }
                 break;
             case 'B':
             case 'b': // DELETE CLASS
-                //define string for crn
+                // define string for crn
                 String classNum;
                 System.out.print("Enter the Class/Lab Number: ");
                 classNum = scn.nextLine();
 
-                for (int i=0; i<valenceCollege.getLectureList().size(); i++) {
-                    if (valenceCollege.getLectureList().get(i).getCrn().equals(classNum)) {
+                for (int i = 0; i < valenceCollege.getLectureList().size(); i++) {
+                    if (valenceCollege.getLectureList().get(i).getCrn().equals(classNum)
+                            && valenceCollege.getLectureList().get(i).isHasLabs() == false) {
                         System.out.println(valenceCollege.getLectureList().get(i) + " deleted!");
-                        valenceCollege.getLectureList().remove(i);
+                        valenceCollege.getLectureList().remove(i).getCrn();
+                        Projectdriver.createFile(College.getLectureList(), "lec.txt");
                     } else if (valenceCollege.getLectureList().get(i).labs != null) {
-                        for (int j = 0; j<valenceCollege.getLectureList().get(i).labs.size(); j++) {
+                        for (int j = 0; j < valenceCollege.getLectureList().get(i).labs.size(); j++) {
                             if (valenceCollege.getLectureList().get(i).labs.get(j).getCrn().equals(classNum)) {
                                 System.out.println(valenceCollege.getLectureList().get(i).labs.get(j) + " deleted!");
                                 valenceCollege.getLectureList().get(i).labs.remove(j);
+                                Projectdriver.createFile(College.getLectureList(), "lec.txt");
                             }
                         }
                     }
 
                 }
-
                 // DON'T FORGET TO UPDATE lec.txt
                 break;
             case 'C':
             case 'c': // ADD LAB TO LECTURE
 
-                //type is either lab or lecture
+                // type is either lab or lecture
                 String type;
                 System.out.println("Enter Lab or Lecture: ");
                 type = scn.nextLine();
@@ -457,7 +476,7 @@ class MainMenu {
                     System.out.println("Enter the Lecture Number to a Lab to: ");
                     lecCrn = scn.nextLine();
 
-                    for (int i=0; i<valenceCollege.getLectureList().size(); i++) {
+                    for (int i = 0; i < valenceCollege.getLectureList().size(); i++) {
                         if (valenceCollege.getLectureList().get(i).getCrn().equals(lecCrn)) {
 
                             String newCrn;
@@ -472,20 +491,19 @@ class MainMenu {
 
                         }
                     }
-                }
-                else if (type.equals("Lecture")) {
+                } else if (type.equals("Lecture")) {
                     String labCrn;
                     System.out.println("Enter the Lab Number to a Lecture to: ");
                     labCrn = scn.nextLine();
 
-                    for (int i=0; i<valenceCollege.getLectureList().size(); i++) {
-                        for (int j = 0; j<valenceCollege.getLectureList().get(i).labs.size(); j++) {
+                    for (int i = 0; i < valenceCollege.getLectureList().size(); i++) {
+                        for (int j = 0; j < valenceCollege.getLectureList().get(i).labs.size(); j++) {
                             if (valenceCollege.getLectureList().get(i).labs.get(j).getCrn().equals(labCrn)) {
                                 String lectureCrn;
                                 String prefix;
                                 String lectureName;
-                                LectureType Type = null; //may crash code
-                                LectureMode lectureMode = null; //may crash code
+                                LectureType Type = null; // may crash code
+                                LectureMode lectureMode = null; // may crash code
                                 boolean hasLabs;
                                 String Classroom;
                                 int creditHours;
@@ -514,11 +532,11 @@ class MainMenu {
                                 System.out.println("Enter credit hours ");
                                 creditHours = scn.nextInt();
 
-                                //contructor for labs
+                                // contructor for labs
                                 if (lectureMode.equals("Online")) {
-                                    valenceCollege.getLectureList().add(new Lecture(lectureCrn, prefix, lectureName, Type , lectureMode, creditHours));
+                                    valenceCollege.getLectureList().add(new Lecture(lectureCrn, prefix, lectureName,
+                                            Type, lectureMode, creditHours));
                                 }
-
 
                             }
                         }
@@ -547,7 +565,6 @@ class MainMenu {
         return bool;
     }
 
-
 }
 
 class IdException extends Exception {
@@ -557,8 +574,6 @@ class IdException extends Exception {
 
 }
 
-
-
 abstract class Student {
     private String name;
     private String id;
@@ -566,20 +581,23 @@ abstract class Student {
     private static ArrayList<String> usedIds = new ArrayList<>();
 
     public Student(String name, String id) {
-        /*if(!isValidId(id)){
-            throw new IdException(("Invalid id format or ID already exists\nTry again later!"));
-        }*/
+        /*
+         * if(!isValidId(id)){
+         * throw new
+         * IdException(("Invalid id format or ID already exists\nTry again later!"));
+         * }
+         */
         this.name = name;
         this.id = id;
-        //usedIds.add(id);
+        // usedIds.add(id);
     }
 
     private boolean isValidId(String id) {
-        //checks format
-        if (!id.matches("[A-Z]{2}\\d{4}")) { //need to verify this works
+        // checks format
+        if (!id.matches("[A-Z]{2}\\d{4}")) { // need to verify this works
             return false;
         }
-        //checks for duplicate
+        // checks for duplicate
         if (usedIds.contains(id)) {
             return false;
         }
@@ -643,7 +661,7 @@ class UndergraduateStudent extends Student {
         return creditHourPrice;
     }
 
-    public UndergraduateStudent(String name, String id, ArrayList<Integer> crnArray,  boolean resident, double gpa) {
+    public UndergraduateStudent(String name, String id, ArrayList<Integer> crnArray, boolean resident, double gpa) {
         super(name, id);
         this.crnArray = crnArray;
         this.gpa = gpa;
@@ -661,7 +679,10 @@ class UndergraduateStudent extends Student {
         double creditCost = calculateCreditCost(creditHourPrice, resident);
         System.out.printf("1 Credit Hour = $%.2f\n\n", creditCost);
         System.out.print("CRN\tCR_PREFIX\tCR_HOURS\n");
-        // need to fix with loop
+        // for(Integer i: crnArray){
+
+        // }
+
         System.out.printf("4587\tMAT 236\t\t4\t" + "$%.2f\n", creditCost * 4.00);
         System.out.printf("2599\tCOP 260\t\t3\t$%.2f\n\n", creditCost * 3.00);
         System.out.println("\t\tHealth & id fees $35.00\n");
@@ -683,7 +704,7 @@ class UndergraduateStudent extends Student {
 }
 
 class MsStudent extends GraduateStudent {
-    //crn array is an array of the courses that the ms student is taking
+    // crn array is an array of the courses that the ms student is taking
     private ArrayList<Integer> crnArray;
 
     public MsStudent(String name, String id, ArrayList<Integer> crnArray) {
@@ -719,13 +740,15 @@ class PhdStudent extends GraduateStudent {
     private String researchSub;
     private ArrayList<Integer> supervisedLabs;
 
-    public PhdStudent(String name, String id, String advisor, String researchSubject, ArrayList<Integer> supervisedLabs) {
+    public PhdStudent(String name, String id, String advisor, String researchSubject,
+            ArrayList<Integer> supervisedLabs) {
         super(name, id);
         this.advisor = advisor;
         this.researchSub = researchSubject;
         this.supervisedLabs = supervisedLabs;
     }
 
+    @Override
     public void printInvoice() {
         System.out.print("VALENCE COLLEGE\n");
         System.out.print("ORLANDO FL 10101\n");
@@ -791,7 +814,8 @@ class Lecture {
 
     // _________________
     // Helper method-used in constructors to set up the common fields
-    private void LectureCommonInfoSetUp(String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode) {
+    private void LectureCommonInfoSetUp(String crn, String prefix, String lectureName, LectureType lectureType,
+            LectureMode lectureMode) {
         this.crn = crn;
         this.prefix = prefix;
         this.lectureName = lectureName;
@@ -800,17 +824,17 @@ class Lecture {
     }
 
     // Non-online with Labs
-    public Lecture( String crn,
-                    String prefix,
-                    String lectureName,
-                    LectureType lectureType,
-                    LectureMode lectureMode,
-                    String classroom,
-                    boolean hasLabs,
-                    int creditHours,
-                    ArrayList<Lab> labs ) {
+    public Lecture(String crn,
+            String prefix,
+            String lectureName,
+            LectureType lectureType,
+            LectureMode lectureMode,
+            String classroom,
+            boolean hasLabs,
+            int creditHours,
+            ArrayList<Lab> labs) {
 
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
+        LectureCommonInfoSetUp(crn, prefix, lectureName, lectureType, lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
@@ -818,48 +842,132 @@ class Lecture {
     }
 
     // Constructor for Non-online without Labs
-    public Lecture( String crn, String prefix, String lectureName,
-                    LectureType lectureType, LectureMode lectureMode, String classroom, boolean hasLabs, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
+    public Lecture(String crn, String prefix, String lectureName,
+            LectureType lectureType, LectureMode lectureMode, String classroom, boolean hasLabs, int creditHours) {
+        LectureCommonInfoSetUp(crn, prefix, lectureName, lectureType, lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
     }
 
     // Constructor for Online Lectures
-    public Lecture(String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode, int creditHours) {
-        LectureCommonInfoSetUp(crn,prefix,lectureName,lectureType,lectureMode);
+    public Lecture(String crn, String prefix, String lectureName, LectureType lectureType, LectureMode lectureMode,
+            int creditHours) {
+        LectureCommonInfoSetUp(crn, prefix, lectureName, lectureType, lectureMode);
         this.classroom = classroom;
         this.hasLabs = hasLabs;
         this.creditHours = creditHours;
     }
 
     // ________
+
     @Override
     public String toString() {
-        String lectureAndLabs = crn + "," + prefix + "," +
-                lectureName;
+        String lectureAndLabs = crn + "," + prefix + "," + lectureName;
         return lectureAndLabs;
     }
+
+    /*
+     * public String toString1() {
+     * String printString1 = crn + "," + prefix + "," + lectureName + "," +
+     * lectureType + "," + lectureMode + ","
+     * + classroom + "," + hasLabs + "," + creditHours;
+     * return printString1;
+     * }
+     */
+
     public String printToText() {
-
-        String lectureAndLabs = crn + "," + prefix + "," +
-                lectureName + "," + lectureType + ","
-                + lectureMode + "," + hasLabs + "," +
-                creditHours+"\n";
-
-        if ( labs != null ) {//printing corresponding labs
-            //lectureAndLabs+="\n";
-            for (Lab lab: labs)
-                lectureAndLabs+= lab +"\n";
+        String haslabString;
+        if (hasLabs == true) {
+            haslabString = "YES";
+        } else {
+            haslabString = "NO";
         }
-        return lectureAndLabs;
+        String name = (crn + "," + prefix + "," +
+                lectureName + "," + lectureType + ","
+                + lectureMode + "," + haslabString + "," +
+                creditHours);
+
+        /*
+         * if (labs != null) {// printing corresponding labs
+         * // lectureAndLabs+="\n";
+         * for (Lab lab : labs)
+         * System.out.println(lab.toString());
+         * }
+         */
+        return name;
     }
-
-
 
     public String getCrn() {
         return this.crn;
+    }
+
+    public void setCrn(String crn) {
+        this.crn = crn;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getLectureName() {
+        return lectureName;
+    }
+
+    public void setLectureName(String lectureName) {
+        this.lectureName = lectureName;
+    }
+
+    public LectureType getLectureType() {
+        return lectureType;
+    }
+
+    public void setLectureType(LectureType lectureType) {
+        this.lectureType = lectureType;
+    }
+
+    public LectureMode getLectureMode() {
+        return lectureMode;
+    }
+
+    public void setLectureMode(LectureMode lectureMode) {
+        this.lectureMode = lectureMode;
+    }
+
+    public String getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
+
+    public boolean isHasLabs() {
+        return hasLabs;
+    }
+
+    public void setHasLabs(boolean hasLabs) {
+        this.hasLabs = hasLabs;
+    }
+
+    public int getCreditHours() {
+        return creditHours;
+    }
+
+    public void setCreditHours(int creditHours) {
+        this.creditHours = creditHours;
+    }
+
+    public ArrayList<Lab> getLabs() {
+        return labs;
+    }
+
+    public void setLabs(ArrayList<Lab> labs) {
+        this.labs = labs;
     }
 
 }
